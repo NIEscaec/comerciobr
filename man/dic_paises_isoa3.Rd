@@ -5,7 +5,7 @@
 \alias{dic_paises_isoa3}
 \title{Dicionário de Correlação Códigos Países - Nomes de Países e ISOA3}
 \format{
-An object of class \code{spec_tbl_df} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 281 rows and 4 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 281 rows and 4 columns.
 }
 \usage{
 dic_paises_isoa3

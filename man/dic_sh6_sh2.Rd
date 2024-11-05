@@ -5,7 +5,7 @@
 \alias{dic_sh6_sh2}
 \title{Dicionário de Correlação SH6 - SH1}
 \format{
-An object of class \code{spec_tbl_df} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 6308 rows and 3 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 6594 rows and 3 columns.
 }
 \usage{
 dic_sh6_sh2

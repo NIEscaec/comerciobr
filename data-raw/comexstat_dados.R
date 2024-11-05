@@ -1,13 +1,14 @@
 # baixa csvs de do comexstat
 
 library(magrittr)
+library(dplyr)
 
 if(!fs::dir_exists(here::here("temp/"))) {
   fs::dir_create("temp")
   fs::dir_create("temp/filtrados")
 }
 
-anos <- c(2022:2010)
+anos <- c(2024:2010)
 url_exp <- paste0("https://balanca.economia.gov.br/balanca/bd/comexstat-bd/ncm/EXP_")
 url_exp_lista <- purrr::map_chr(anos, ~ paste0(url_exp, .x, ".csv"))
 purrr::walk2(url_exp_lista, anos, ~ httr::GET(.x, config = httr::config(ssl_verifypeer = F),
@@ -40,8 +41,13 @@ httr::GET("https://balanca.economia.gov.br/balanca/bd/tabelas/NCM.csv",
           config = httr::config(ssl_verifypeer = F),
           httr::write_disk(here::here("data-raw", "ncm.csv"), overwrite = T))
 
-ncm_sh6 <- vroom::vroom(here::here("data-raw", "ncm.csv"),
-                        col_select = c("CO_NCM", "CO_SH6"))
+#ncm_sh6 <- vroom::vroom(here::here("data-raw", "ncm.csv"),
+                        #col_select = c("CO_NCM", "CO_SH6"))
+
+ncm_sh6 <- readr::read_csv2(here::here("data-raw", "ncm.csv"),
+                            locale = readr::locale(encoding = "ISO-8859-1")) %>%
+  dplyr::select("CO_NCM", "CO_SH6")
+
 
 httr::GET("https://balanca.economia.gov.br/balanca/bd/tabelas/NCM_SH.csv",
           config = httr::config(ssl_verifypeer = F),
@@ -76,10 +82,12 @@ httr::GET("https://balanca.economia.gov.br/balanca/bd/tabelas/PAIS.csv",
 
 dic_paises <- vroom::vroom(here::here("data-raw", "dic_paises.csv"),
                            col_select = c("CO_PAIS", "NO_PAIS"),
+                           delim = ";",
                            locale = vroom::locale(encoding = "ISO-8859-1"))
 
 dic_paises_isoa3 <- vroom::vroom(here::here("data-raw", "dic_paises.csv"),
                            col_select = c("CO_PAIS", "CO_PAIS_ISOA3", "NO_PAIS_ING", "NO_PAIS"),
+                           delim = ";",
                            locale = vroom::locale(encoding = "ISO-8859-1"))
 
 # CUCI
@@ -391,3 +399,5 @@ usethis::use_data(cgce_df, cuci_df, fator_df, isic_df,
                   dic_ncm_fator, dic_ncm_isic, overwrite = T)
 
 devtools::install()
+
+
